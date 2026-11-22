@@ -219,7 +219,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col pb-24 antialiased selection:bg-emerald-500 selection:text-slate-950">
+<body class="min-h-screen flex flex-col pb-28 antialiased selection:bg-emerald-500 selection:text-slate-950">
 
     <!-- ==================== BANNER FLOTANTE DE INSTALACIÓN ==================== -->
     <div id="bannerInstalacion" class="hidden fixed top-3 left-3 right-3 max-w-xl mx-auto z-50 bg-slate-900/95 border border-emerald-500/40 text-white px-3.5 py-2.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-between gap-3 modal-animate">
@@ -239,6 +239,37 @@
             <button onclick="cerrarBannerInstalacion()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition">
                 <i data-lucide="x" class="w-4 h-4"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- ==================== PUBLICIDAD FLOTANTE PERIÓDICA (CON BOTÓN CERRAR) ==================== -->
+    <div id="modalPublicidadFlotante" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-stadium-900 border border-emerald-500/30 w-full max-w-md rounded-3xl p-4 shadow-2xl modal-animate relative">
+            <div class="flex items-center justify-between gap-2 pb-2.5 mb-3 border-b border-white/10">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 shrink-0">
+                        Auspicia
+                    </span>
+                    <h3 id="flotanteTitulo" class="font-display text-sm font-extrabold text-white truncate">Publicidad</h3>
+                </div>
+                <button type="button" onclick="cerrarPublicidadFlotante()" class="p-1.5 text-slate-300 hover:text-white bg-white/5 hover:bg-white/15 rounded-xl border border-white/10 transition shrink-0" title="Cerrar publicidad">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <a id="flotanteLink" href="#" target="_blank" class="block rounded-2xl overflow-hidden border border-white/10 bg-stadium-950 mb-3">
+                <img id="flotanteImg" src="https://raw.githubusercontent.com/Kanchapro/FaltaunoSP/refs/heads/main/logo.png" alt="Publicidad" class="w-full max-h-64 object-contain mx-auto">
+            </a>
+
+            <div class="flex items-center justify-between gap-2">
+                <button type="button" onclick="cerrarPublicidadFlotante()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition">
+                    Cerrar
+                </button>
+                <a id="flotanteBtnWsp" href="#" target="_blank" class="btn-glow text-slate-950 text-xs font-extrabold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                    <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                    <span>Consultar por WhatsApp</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -377,17 +408,17 @@
         </section>
     </main>
 
-    <!-- ==================== BANNERS PUBLICITARIOS INFERIORES ==================== -->
-    <div class="fixed bottom-0 left-0 right-0 z-30 bg-[#050a14]/95 backdrop-blur-xl border-t border-white/10 py-1.5 px-3">
+    <!-- ==================== BANNERS PUBLICITARIOS INFERIORES (AMPLIADOS) ==================== -->
+    <div class="fixed bottom-0 left-0 right-0 z-30 bg-[#050a14]/95 backdrop-blur-xl border-t border-white/10 py-2 px-3">
         <div class="max-w-2xl mx-auto">
-            <div id="contenedorPublicidadesInferiores" class="grid grid-cols-2 gap-2 items-center">
-                <div id="wrapperPub1" class="bg-stadium-900/90 border border-white/10 rounded-xl p-1 text-center h-12 flex items-center justify-center overflow-hidden">
-                    <div id="contenedorPub1" class="w-full transition-opacity duration-500">
+            <div id="contenedorPublicidadesInferiores" class="grid grid-cols-2 gap-2.5 items-center">
+                <div id="wrapperPub1" class="bg-stadium-900/90 border border-white/10 rounded-xl p-1.5 text-center h-16 flex items-center justify-center overflow-hidden">
+                    <div id="contenedorPub1" class="w-full h-full flex items-center justify-center transition-opacity duration-500">
                         <span class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Publicidad 1</span>
                     </div>
                 </div>
-                <div id="wrapperPub2" class="bg-stadium-900/90 border border-white/10 rounded-xl p-1 text-center h-12 flex items-center justify-center overflow-hidden">
-                    <div id="contenedorPub2" class="w-full transition-opacity duration-500">
+                <div id="wrapperPub2" class="bg-stadium-900/90 border border-white/10 rounded-xl p-1.5 text-center h-16 flex items-center justify-center overflow-hidden">
+                    <div id="contenedorPub2" class="w-full h-full flex items-center justify-center transition-opacity duration-500">
                         <span class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Publicidad 2</span>
                     </div>
                 </div>
@@ -800,10 +831,11 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-4 gap-1 bg-stadium-950 p-1 rounded-xl mb-4 border border-white/10">
+            <div class="grid grid-cols-5 gap-1 bg-stadium-950 p-1 rounded-xl mb-4 border border-white/10">
                 <button onclick="cambiarTabAdmin('complejos')" id="tabAdminComplejos" class="py-1.5 rounded-lg text-[11px] font-bold bg-emerald-500 text-slate-950 transition">Complejos</button>
                 <button onclick="cambiarTabAdmin('pub1')" id="tabAdminPub1" class="py-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition">Pub 1</button>
                 <button onclick="cambiarTabAdmin('pub2')" id="tabAdminPub2" class="py-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition">Pub 2</button>
+                <button onclick="cambiarTabAdmin('flotante')" id="tabAdminFlotante" class="py-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition">Flotante</button>
                 <button onclick="cambiarTabAdmin('tercertiempo')" id="tabAdminTercerTiempo" class="py-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition">3er Tiempo</button>
             </div>
 
@@ -910,6 +942,51 @@
                 <div id="listaPub2Admin" class="space-y-2"></div>
             </div>
 
+            <div id="seccionAdminFlotante" class="space-y-3 hidden">
+                <div class="bg-stadium-950/80 p-3.5 rounded-2xl border border-emerald-500/25 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <h3 class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Frecuencia de Aparición</h3>
+                        <p id="infoVisitasActuales" class="text-[11px] text-slate-400 mt-0.5">Se muestra cada N entradas del usuario.</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <span class="text-[11px] text-slate-300 font-semibold">Cada</span>
+                        <input type="number" id="adminFrecuenciaFlotante" min="1" max="100" value="10" class="w-16 bg-stadium-900 border border-white/15 rounded-xl px-2 py-1.5 text-xs font-bold text-white text-center">
+                        <button type="button" onclick="guardarFrecuenciaFlotanteAdmin()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-3 py-1.5 rounded-xl text-xs transition">
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+
+                <form id="formAgregarFlotante" onsubmit="guardarFlotanteAdmin(event)" class="space-y-2.5 bg-stadium-950/80 p-3.5 rounded-2xl border border-white/10">
+                    <h3 class="text-[11px] font-bold text-amber-400 uppercase tracking-wider">Nueva Publicidad Flotante</h3>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-1">Título / Auspiciante</label>
+                        <input type="text" id="flotanteAdminTitle" placeholder="Ej: Promo Viernes - Lomitería" required class="w-full bg-stadium-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-1">URL Imagen / GIF</label>
+                        <input type="url" id="flotanteAdminImgUrl" placeholder="https://..." required class="w-full bg-stadium-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-mono">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">WhatsApp</label>
+                            <input type="tel" id="flotanteAdminWsp" placeholder="3644..." required class="w-full bg-stadium-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Duración (seg)</label>
+                            <input type="number" id="flotanteAdminSeconds" min="3" max="60" value="8" required class="w-full bg-stadium-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-1">Mensaje predefinido</label>
+                        <input type="text" id="flotanteAdminMsg" placeholder="¡Hola! Vi su publicidad flotante en Falta Uno SP." required class="w-full bg-stadium-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <button type="submit" class="w-full btn-glow text-slate-950 font-bold py-2 rounded-xl text-xs transition">Guardar Publicidad Flotante</button>
+                </form>
+
+                <div id="listaFlotanteAdmin" class="space-y-2"></div>
+            </div>
+
             <div id="seccionAdminTercerTiempo" class="space-y-3 hidden">
                 <!-- BOTÓN PARA HABILITAR / DESHABILITAR SECCIÓN TERCER TIEMPO -->
                 <div class="bg-stadium-950/80 p-3.5 rounded-2xl border border-white/10 flex items-center justify-between gap-3">
@@ -998,6 +1075,7 @@
         const DURACION_72HS_MS = 72 * 60 * 60 * 1000;
         const CLAVE_TEMA = "faltauno_tema";
         const CLAVE_DEVICE_ID = "faltauno_device_id";
+        const CLAVE_VISITAS = "faltauno_visitas_count";
 
         let ultimoClickTabCanchas = 0;
 
@@ -1014,7 +1092,19 @@
             }
         }
 
+        function registrarVisitaYContar() {
+            try {
+                const actual = parseInt(localStorage.getItem(CLAVE_VISITAS) || '0', 10) || 0;
+                const nuevo = actual + 1;
+                localStorage.setItem(CLAVE_VISITAS, String(nuevo));
+                return nuevo;
+            } catch (e) {
+                return 1;
+            }
+        }
+
         const deviceIdActual = obtenerDeviceId();
+        const numeroVisitaActual = registrarVisitaYContar();
 
         function aplicarTema(esClaro) {
             document.body.classList.toggle('light-mode', esClaro);
@@ -1283,6 +1373,10 @@
         let complejosAdminCache = [];
         let pub1Cache = [];
         let pub2Cache = [];
+        let flotanteCache = [];
+        let frecuenciaFlotante = 10;
+        let flotanteYaMostradoEnSesion = false;
+        let timerFlotante = null;
         let tercerTiempoCache = [];
         let tercerTiempoPinsCache = [];
 
@@ -1297,6 +1391,44 @@
         let timerPub1 = null, timerPub2 = null;
 
         const hoyStr = new Date().toISOString().split('T')[0];
+
+        window.cerrarPublicidadFlotante = () => {
+            if (timerFlotante) {
+                clearTimeout(timerFlotante);
+                timerFlotante = null;
+            }
+            const modal = document.getElementById('modalPublicidadFlotante');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        function evaluarPublicidadFlotante() {
+            if (flotanteYaMostradoEnSesion) return;
+            if (!flotanteCache.length) return;
+            const freq = Math.max(1, parseInt(frecuenciaFlotante, 10) || 10);
+            if (numeroVisitaActual % freq !== 0) return;
+
+            const idx = (Math.floor(numeroVisitaActual / freq) - 1) % flotanteCache.length;
+            const ad = flotanteCache[Math.max(0, idx)];
+            if (!ad) return;
+
+            flotanteYaMostradoEnSesion = true;
+
+            const telLimpio = (ad.whatsapp || '').replace(/\D/g, '');
+            const urlWsp = `https://wa.me/549${telLimpio}?text=${encodeURIComponent(ad.mensaje || '¡Hola! Vi su publicidad en Falta Uno SP.')}`;
+
+            document.getElementById('flotanteTitulo').textContent = ad.titulo || 'Publicidad';
+            document.getElementById('flotanteImg').src = ad.imgUrl || LOGO_FALLBACK;
+            document.getElementById('flotanteLink').href = urlWsp;
+            document.getElementById('flotanteBtnWsp').href = urlWsp;
+
+            document.getElementById('modalPublicidadFlotante').classList.remove('hidden');
+            lucide.createIcons();
+
+            const seg = Math.max(3, parseInt(ad.segundos, 10) || 8);
+            timerFlotante = setTimeout(() => {
+                window.cerrarPublicidadFlotante();
+            }, seg * 1000);
+        }
 
         function esCreadorPartido(partido) {
             if (!partido) return false;
@@ -1753,930 +1885,3 @@
                 inputLugar.placeholder = "Ej: Complejo La Red, Club Unión...";
                 ['Pádel Dobles', 'Pádel Single'].forEach(m => {
                     selectModalidad.innerHTML += `<option value="${m}">${m}</option>`;
-                });
-                ['Cualquier puesto', 'Revés', 'Drive', 'Izquierdo', 'Derecho'].forEach(p => {
-                    selectPuesto.innerHTML += `<option value="${p}">${p}</option>`;
-                });
-            }
-        };
-
-        window.setSubTabCanchas = (subtab) => {
-            subTabCanchasActual = subtab;
-            const btnFutbol = document.getElementById('subtab-Futbol');
-            const btnPadel = document.getElementById('subtab-Padel');
-
-            if (subtab === 'Futbol') {
-                btnFutbol.className = "py-2 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition flex items-center justify-center gap-1.5";
-                btnPadel.className = "py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5";
-            } else {
-                btnFutbol.className = "py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition flex items-center justify-center gap-1.5";
-                btnPadel.className = "py-2 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition flex items-center justify-center gap-1.5";
-            }
-            renderizarComplejosBotones();
-        };
-
-        function renderizarComplejosBotones() {
-            const contenedor = document.getElementById('listaComplejosBotones');
-            const complejosFiltrados = complejosAdminCache.filter(comp => {
-                const deporte = comp.deporte || 'Futbol';
-                return deporte === subTabCanchasActual;
-            });
-
-            if (!complejosFiltrados.length) {
-                contenedor.innerHTML = `
-                    <div class="card-pro rounded-2xl p-8 text-center col-span-full">
-                        <div class="text-xl mb-2">🏟️</div>
-                        <h3 class="font-display text-sm font-bold text-white">Sin complejos de ${subTabCanchasActual === 'Futbol' ? 'Fútbol' : 'Pádel'}</h3>
-                        <p class="text-xs text-slate-400 mt-1">Pedí tu PIN para dar de alta tu complejo.</p>
-                    </div>`;
-                return;
-            }
-
-            contenedor.innerHTML = complejosFiltrados.map(comp => `
-                <div onclick="abrirPerfilComplejo('${comp.id}')" ondblclick="abrirModalAdminPinComplejo('${comp.id}')" class="card-pro rounded-2xl p-3.5 cursor-pointer group flex items-center justify-between gap-3 select-none" title="Click para ver horarios • Doble click para PIN">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-base shrink-0">
-                            ${comp.deporte === 'Padel' ? '🥎' : '⚽'}
-                        </div>
-                        <div class="min-w-0">
-                            <h3 class="font-display text-sm font-extrabold text-white truncate group-hover:text-emerald-400 transition">${comp.nombre}</h3>
-                            <p class="text-[11px] text-slate-400 truncate">📍 ${comp.direccion}</p>
-                        </div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500 group-hover:text-emerald-400 shrink-0 transition"></i>
-                </div>
-            `).join('');
-
-            lucide.createIcons();
-        }
-
-        window.abrirPerfilComplejo = (idComplejo) => {
-            const comp = complejosAdminCache.find(c => c.id === idComplejo);
-            if (!comp) return;
-            complejoSeleccionadoModal = comp;
-            
-            document.getElementById('tituloModalComplejoNombre').textContent = comp.nombre;
-            document.getElementById('tituloModalComplejoDir').textContent = `📍 ${comp.direccion}`;
-            
-            const telLimpio = (comp.whatsapp || '').replace(/\D/g, '');
-            const msgWspGen = encodeURIComponent(`¡Hola ${comp.nombre}! Vi su perfil en *Falta Uno SP* y quiero consultar por canchas y horarios.`);
-            document.getElementById('btnChatComplejoModal').href = `https://wa.me/549${telLimpio}?text=${msgWspGen}`;
-
-            const d0 = new Date();
-            const d1 = new Date(); d1.setDate(d0.getDate() + 1);
-            const d2 = new Date(); d2.setDate(d0.getDate() + 2);
-
-            const s0 = d0.toISOString().split('T')[0];
-            const s1 = d1.toISOString().split('T')[0];
-            const s2 = d2.toISOString().split('T')[0];
-
-            fechaSeleccionadaModal = s0;
-
-            const grillaDias = document.getElementById('grillaDiasComplejo');
-            grillaDias.innerHTML = `
-                <button onclick="cambiarFechaModalComplejo('${s0}')" id="btnDia_${s0}" class="py-1.5 px-1 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition text-center">Hoy (${d0.getDate()}/${d0.getMonth()+1})</button>
-                <button onclick="cambiarFechaModalComplejo('${s1}')" id="btnDia_${s1}" class="py-1.5 px-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition text-center">Mañana (${d1.getDate()}/${d1.getMonth()+1})</button>
-                <button onclick="cambiarFechaModalComplejo('${s2}')" id="btnDia_${s2}" class="py-1.5 px-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition text-center">Pasado (${d2.getDate()}/${d2.getMonth()+1})</button>
-            `;
-
-            renderizarGrillaHorariosModal();
-            document.getElementById('modalPerfilComplejo').classList.remove('hidden');
-        };
-
-        window.cerrarModalPerfilComplejo = () => document.getElementById('modalPerfilComplejo').classList.add('hidden');
-
-        window.cambiarFechaModalComplejo = (fechaStr) => {
-            fechaSeleccionadaModal = fechaStr;
-            [0, 1, 2].forEach(i => {
-                const d = new Date(); d.setDate(d.getDate() + i);
-                const s = d.toISOString().split('T')[0];
-                const btn = document.getElementById(`btnDia_${s}`);
-                if (btn) {
-                    if (s === fechaStr) btn.className = "py-1.5 px-1 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition text-center";
-                    else btn.className = "py-1.5 px-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition text-center";
-                }
-            });
-            renderizarGrillaHorariosModal();
-        };
-
-        function renderizarGrillaHorariosModal() {
-            const contenedor = document.getElementById('contenedorGrillaHorarios');
-            if (!complejoSeleccionadoModal) return;
-
-            const turnosDelComplejo = canchasCache.filter(c => c.complejo === complejoSeleccionadoModal.nombre && c.fecha === fechaSeleccionadaModal);
-
-            turnosDelComplejo.sort((a, b) => obtenerPesoCronologico(a.horarios) - obtenerPesoCronologico(b.horarios));
-
-            if (!turnosDelComplejo.length) {
-                contenedor.innerHTML = `
-                    <div class="bg-stadium-950/60 border border-white/5 rounded-xl p-6 text-center">
-                        <p class="text-xs text-slate-400">Sin horarios cargados para esta fecha.</p>
-                    </div>`;
-                return;
-            }
-
-            contenedor.innerHTML = turnosDelComplejo.map(t => {
-                const disponible = t.disponible !== false;
-                const telLimpio = (complejoSeleccionadoModal.whatsapp || '').replace(/\D/g, '');
-                const msgReserva = encodeURIComponent(`¡Hola ${complejoSeleccionadoModal.nombre}! Quiero reservar el turno de la ${t.numeroCancha} (${t.horarios}) para el día ${t.fecha} por ${t.precio}. ¿Está disponible? 🟢`);
-
-                const luzColor = disponible ? 'bg-emerald-500' : 'bg-rose-500';
-                const estadoBorde = disponible ? 'border-emerald-500/25' : 'border-rose-500/25 opacity-60';
-
-                return `
-                <div class="bg-stadium-950 border ${estadoBorde} rounded-xl px-3.5 py-2.5 flex items-center justify-between gap-2.5">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <span class="w-2.5 h-2.5 rounded-full ${luzColor} shrink-0"></span>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="font-display text-sm font-extrabold text-white">${t.horarios}</span>
-                                <span class="text-[10px] text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">${t.numeroCancha}</span>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-400">${t.precio}</span>
-                        </div>
-                    </div>
-                    ${disponible ? `
-                        <a href="https://wa.me/549${telLimpio}?text=${msgReserva}" target="_blank" class="btn-glow text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl transition shrink-0">
-                            Reservar
-                        </a>
-                    ` : `
-                        <span class="bg-rose-500/15 text-rose-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-rose-500/25 shrink-0">Ocupado</span>
-                    `}
-                </div>`;
-            }).join('');
-        }
-
-        window.abrirModalAdminPinComplejo = (idComplejo = null) => {
-            window.cerrarModalPerfilComplejo();
-            if (idComplejo) {
-                complejoAutogestionadoActual = complejosAdminCache.find(c => c.id === idComplejo) || null;
-            }
-            document.getElementById('inputPinComplejoAutogestion').value = '';
-            document.getElementById('modalAdminPinComplejo').classList.remove('hidden');
-            setTimeout(() => document.getElementById('inputPinComplejoAutogestion').focus(), 50);
-        };
-        window.cerrarModalAdminPinComplejo = () => document.getElementById('modalAdminPinComplejo').classList.add('hidden');
-
-        window.verificarPinAutogestionComplejo = () => {
-            const pin = document.getElementById('inputPinComplejoAutogestion').value.trim();
-            const encontrado = complejosAdminCache.find(c => c.pin === pin);
-            if (encontrado) {
-                complejoAutogestionadoActual = encontrado;
-                cerrarModalAdminPinComplejo();
-                document.getElementById('tituloAutogestionComp').textContent = encontrado.nombre;
-                document.getElementById('autoFecha').value = hoyStr;
-                document.getElementById('modalPanelAutogestion').classList.remove('hidden');
-                renderizarTurnosAutogestion();
-            } else {
-                alert("❌ PIN incorrecto.");
-            }
-        };
-        window.cerrarPanelAutogestion = () => document.getElementById('modalPanelAutogestion').classList.add('hidden');
-
-        window.abrirModalEditarTurnoCancha = (idTurno) => {
-            const turno = canchasCache.find(c => c.id === idTurno);
-            if (!turno) return;
-
-            document.getElementById('editTurnoId').value = turno.id;
-            document.getElementById('editTurnoCancha').value = turno.numeroCancha || '';
-            document.getElementById('editTurnoFecha').value = turno.fecha || hoyStr;
-            document.getElementById('editTurnoHorario').value = turno.horarios || '';
-            document.getElementById('editTurnoPrecio').value = turno.precio || '';
-
-            document.getElementById('modalEditarTurnoCancha').classList.remove('hidden');
-            lucide.createIcons();
-        };
-
-        window.cerrarModalEditarTurnoCancha = () => {
-            document.getElementById('modalEditarTurnoCancha').classList.add('hidden');
-        };
-
-        window.guardarEdicionTurnoCancha = async (e) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-
-            const idTurno = document.getElementById('editTurnoId').value;
-            let precioEditado = document.getElementById('editTurnoPrecio').value.trim();
-            if (precioEditado && !precioEditado.startsWith('$')) {
-                precioEditado = '$' + precioEditado;
-            }
-
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courts', idTurno), {
-                numeroCancha: document.getElementById('editTurnoCancha').value.trim(),
-                fecha: document.getElementById('editTurnoFecha').value,
-                horarios: document.getElementById('editTurnoHorario').value.trim(),
-                precio: precioEditado
-            });
-
-            window.cerrarModalEditarTurnoCancha();
-            renderizarTurnosAutogestion();
-        };
-
-        window.generarGrillaFijaAutogestion = async (e) => {
-            e.preventDefault();
-            if (!db || !complejoAutogestionadoActual) return;
-
-            const cancha = document.getElementById('autoCancha').value.trim();
-            const fecha = document.getElementById('autoFecha').value;
-            const horaInicio = parseInt(document.getElementById('autoHoraInicio').value, 10);
-            const horaFin = parseInt(document.getElementById('autoHoraFin').value, 10);
-            let precioInput = document.getElementById('autoPrecio').value.trim();
-
-            if (!precioInput.startsWith('$')) {
-                precioInput = '$' + precioInput;
-            }
-
-            const franjasSeleccionadas = construirFranjasHorarias(horaInicio, horaFin);
-
-            if (!franjasSeleccionadas.length) {
-                return alert("❌ Elegí una franja horaria válida.");
-            }
-
-            for (const horarios of franjasSeleccionadas) {
-                const nuevoTurno = {
-                    complejo: complejoAutogestionadoActual.nombre,
-                    numeroCancha: cancha,
-                    fecha: fecha,
-                    horarios: horarios,
-                    precio: precioInput,
-                    disponible: true,
-                    creadoEn: serverTimestamp()
-                };
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'courts'), nuevoTurno);
-            }
-
-            document.getElementById('autoCancha').value = '';
-            document.getElementById('autoPrecio').value = '';
-            alert(`✅ ¡Grilla generada (${franjasSeleccionadas.length} turnos)!`);
-            renderizarTurnosAutogestion();
-        };
-
-        function renderizarTurnosAutogestion() {
-            const contenedor = document.getElementById('listaTurnosAutogestion');
-            if (!complejoAutogestionadoActual) return;
-
-            const misTurnos = canchasCache.filter(c => c.complejo === complejoAutogestionadoActual.nombre);
-            misTurnos.sort((a, b) => obtenerPesoCronologico(a.horarios) - obtenerPesoCronologico(b.horarios));
-
-            if (!misTurnos.length) {
-                contenedor.innerHTML = `<p class="text-center py-4 text-xs text-slate-500">Sin turnos generados.</p>`;
-                return;
-            }
-
-            contenedor.innerHTML = misTurnos.map(t => {
-                const disponible = t.disponible !== false;
-                const textoEstado = disponible ? '🟢 Libre' : '🔴 Ocupado';
-                return `
-                <div class="bg-stadium-950 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <h4 class="text-xs font-bold text-white truncate">${t.numeroCancha} • ${t.horarios}</h4>
-                            <span class="text-[10px] text-emerald-400 font-bold">${t.precio}</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400">📅 ${t.fecha}</p>
-                    </div>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" onclick="abrirModalEditarTurnoCancha('${t.id}')" class="bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 text-[11px] px-2 py-1 rounded-lg font-semibold">Editar</button>
-                        <button type="button" onclick="toggleDisponibilidadTurno('${t.id}', ${!disponible})" class="text-[11px] font-bold px-2 py-1 rounded-lg border ${disponible ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/20 text-rose-300 border-rose-500/30'} transition">
-                            ${textoEstado}
-                        </button>
-                        <button type="button" onclick="eliminarTurnoAutogestion('${t.id}')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2 py-1 rounded-lg">Borrar</button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        window.toggleDisponibilidadTurno = async (idTurno, nuevoEstado) => {
-            await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courts', idTurno), { disponible: nuevoEstado });
-            renderizarTurnosAutogestion();
-        };
-
-        window.eliminarTurnoAutogestion = async (idTurno) => {
-            if (confirm("¿Eliminar este turno de la grilla?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'courts', idTurno));
-                renderizarTurnosAutogestion();
-            }
-        };
-
-        window.abrirModalAdmin = () => {
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('modalAdminLogin').classList.remove('hidden');
-        };
-        window.cerrarModalAdmin = () => document.getElementById('modalAdminLogin').classList.add('hidden');
-
-        window.verificarAdminPassword = () => {
-            if (document.getElementById('adminPasswordInput').value.trim() === 'atitomelero') {
-                cerrarModalAdmin();
-                document.getElementById('modalAdminPanel').classList.remove('hidden');
-                aplicarEstadoUItercerTiempo();
-                renderizarAdminComplejos();
-                renderizarAdminPub1();
-                renderizarAdminPub2();
-                renderizarAdminPinsTercerTiempo();
-                renderizarAdminTercerTiempo();
-            } else {
-                alert("❌ Contraseña incorrecta");
-            }
-        };
-        window.cerrarPanelAdmin = () => document.getElementById('modalAdminPanel').classList.add('hidden');
-
-        window.cambiarTabAdmin = (tab) => {
-            ['Complejos', 'Pub1', 'Pub2', 'TercerTiempo'].forEach(t => {
-                document.getElementById(`seccionAdmin${t}`).classList.add('hidden');
-                document.getElementById(`tabAdmin${t}`).className = "py-1.5 rounded-lg text-[11px] font-bold text-slate-400 hover:text-white transition";
-            });
-            const map = { complejos: 'Complejos', pub1: 'Pub1', pub2: 'Pub2', tercertiempo: 'TercerTiempo' };
-            const key = map[tab];
-            document.getElementById(`seccionAdmin${key}`).classList.remove('hidden');
-            document.getElementById(`tabAdmin${key}`).className = "py-1.5 rounded-lg text-[11px] font-bold bg-emerald-500 text-slate-950 transition";
-            if (tab === 'tercertiempo') {
-                aplicarEstadoUItercerTiempo();
-                renderizarAdminPinsTercerTiempo();
-                renderizarAdminTercerTiempo();
-            }
-        };
-
-        window.guardarComplejoAdmin = async (e) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-            const nuevo = {
-                nombre: document.getElementById('adminNombreComp').value.trim(),
-                pin: document.getElementById('adminPinComp').value.trim(),
-                deporte: document.getElementById('adminDeporteComp').value,
-                direccion: document.getElementById('adminDirComp').value.trim(),
-                whatsapp: document.getElementById('adminWspComp').value.trim(),
-                creadoEn: serverTimestamp()
-            };
-            if (nuevo.pin.length !== 4) return alert("El PIN debe tener 4 dígitos.");
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'admin_complexes'), nuevo);
-            document.getElementById('formAgregarComplejoAdmin').reset();
-            alert("✅ Complejo guardado.");
-        };
-
-        window.eliminarComplejoAdmin = async (id) => {
-            if (confirm("¿Eliminar este complejo?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'admin_complexes', id));
-            }
-        };
-
-        window.guardarAdAdmin = async (e, coleccion, nombreSeccion) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-            const isPub1 = coleccion === 'ads_pub1';
-            const nuevoAd = {
-                titulo: document.getElementById(isPub1 ? 'pub1Title' : 'pub2Title').value.trim(),
-                imgUrl: document.getElementById(isPub1 ? 'pub1ImgUrl' : 'pub2ImgUrl').value.trim(),
-                whatsapp: document.getElementById(isPub1 ? 'pub1Wsp' : 'pub2Wsp').value.trim().replace(/\D/g, ''),
-                mensaje: document.getElementById(isPub1 ? 'pub1Msg' : 'pub2Msg').value.trim(),
-                segundos: parseInt(document.getElementById(isPub1 ? 'pub1Seconds' : 'pub2Seconds').value, 10) || 6,
-                esDoble: document.getElementById(isPub1 ? 'pub1Doble' : 'pub2Doble').checked,
-                creadoEn: serverTimestamp()
-            };
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', coleccion), nuevoAd);
-            document.getElementById(isPub1 ? 'formAgregarPub1' : 'formAgregarPub2').reset();
-            alert(`✅ Anuncio guardado en ${nombreSeccion}.`);
-        };
-
-        window.eliminarAdAdmin = async (id, coleccion) => {
-            if (confirm("¿Eliminar este anuncio?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', coleccion, id));
-            }
-        };
-
-        window.guardarPinTercerTiempoAdmin = async (e) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-            const comercio = document.getElementById('adminPinTtComercio').value.trim();
-            const pin = document.getElementById('adminPinTtCodigo').value.trim();
-            if (pin.length !== 4) return alert("El PIN debe tener 4 dígitos.");
-
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo_pins'), {
-                comercio,
-                pin,
-                activo: true,
-                creadoEn: serverTimestamp()
-            });
-            document.getElementById('adminPinTtComercio').value = '';
-            document.getElementById('adminPinTtCodigo').value = '';
-            alert("✅ PIN creado para el comercio.");
-        };
-
-        window.eliminarPinTercerTiempoAdmin = async (id) => {
-            if (confirm("¿Eliminar este PIN de comercio?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo_pins', id));
-            }
-        };
-
-        window.guardarTercerTiempoAdmin = async (e) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-            const fileInput = document.getElementById('ttImgFile');
-            const archivo = fileInput?.files?.[0];
-
-            const btnSubmit = document.getElementById('btnSubmitAdminTt');
-            const textoOriginal = btnSubmit.innerHTML;
-            btnSubmit.disabled = true;
-            btnSubmit.innerHTML = `<span>Subiendo...</span>`;
-
-            try {
-                const imgComprimida = archivo
-                    ? await comprimirImagenArchivo(archivo)
-                    : LOGO_FALLBACK;
-
-                const nuevoComercio = {
-                    titulo: document.getElementById('ttTitle').value.trim(),
-                    imgUrl: imgComprimida,
-                    whatsapp: document.getElementById('ttWsp').value.trim().replace(/\D/g, ''),
-                    categoria: document.getElementById('ttCategoria').value.trim(),
-                    descripcion: document.getElementById('ttDesc').value.trim(),
-                    ubicacion: null,
-                    venceEn: Date.now() + DURACION_72HS_MS,
-                    creadoEn: serverTimestamp()
-                };
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo'), nuevoComercio);
-                document.getElementById('formAgregarTercerTiempo').reset();
-                document.getElementById('previewAdminTtImg').src = LOGO_FALLBACK;
-                alert("✅ Comercio guardado (72 hs).");
-            } catch (err) {
-                alert("❌ " + (err.message || "No se pudo guardar."));
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = textoOriginal;
-            }
-        };
-
-        window.eliminarTercerTiempoAdmin = async (id) => {
-            if (confirm("¿Eliminar esta publicación del Tercer Tiempo?")) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo', id));
-            }
-        };
-
-        function renderizarAdminPinsTercerTiempo() {
-            const c = document.getElementById('listaPinsTercerTiempoAdmin');
-            if (!c) return;
-            if (!tercerTiempoPinsCache.length) {
-                c.innerHTML = `<p class="text-[11px] text-slate-500">Sin PINs cargados.</p>`;
-                return;
-            }
-            c.innerHTML = tercerTiempoPinsCache.map(p => `
-                <div class="bg-stadium-900 border border-white/10 rounded-xl px-3 py-1.5 flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2 min-w-0">
-                        <span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded tracking-wider">${p.pin}</span>
-                        <span class="text-xs font-bold text-white truncate">${p.comercio || 'Comercio'}</span>
-                    </div>
-                    <button type="button" onclick="eliminarPinTercerTiempoAdmin('${p.id}')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2 py-1 rounded-lg font-semibold shrink-0">Quitar</button>
-                </div>
-            `).join('');
-        }
-
-        function renderizarAdminComplejos() {
-            const c = document.getElementById('listaComplejosAdmin');
-            if (!complejosAdminCache.length) { c.innerHTML = `<p class="text-center py-3 text-xs text-slate-500">Sin complejos.</p>`; return; }
-            c.innerHTML = complejosAdminCache.map(item => `
-                <div class="bg-stadium-950 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-1.5 py-0.5 rounded">${item.pin}</span>
-                            <span class="bg-white/10 text-slate-300 text-[10px] font-semibold px-1.5 py-0.5 rounded">${item.deporte === 'Padel' ? 'Pádel' : 'Fútbol'}</span>
-                            <h4 class="text-xs font-bold text-white truncate">${item.nombre}</h4>
-                        </div>
-                        <p class="text-[10px] text-slate-400 truncate mt-0.5">${item.direccion} • ${item.whatsapp}</p>
-                    </div>
-                    <button onclick="eliminarComplejoAdmin('${item.id}')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2.5 py-1 rounded-lg font-semibold shrink-0">Eliminar</button>
-                </div>
-            `).join('');
-        }
-
-        function renderizarAdminPub1() {
-            const c = document.getElementById('listaPub1Admin');
-            if (!pub1Cache.length) { c.innerHTML = `<p class="text-center py-3 text-xs text-slate-500">Sin anuncios.</p>`; return; }
-            c.innerHTML = pub1Cache.map(a => `
-                <div class="bg-stadium-950 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <img src="${a.imgUrl}" class="w-10 h-7 object-cover rounded border border-white/10 shrink-0">
-                        <div class="min-w-0">
-                            <h4 class="text-xs font-bold text-white truncate">${a.titulo}</h4>
-                            <p class="text-[10px] text-slate-400 truncate">${a.segundos}s${a.esDoble ? ' • Doble' : ''}</p>
-                        </div>
-                    </div>
-                    <button onclick="eliminarAdAdmin('${a.id}', 'ads_pub1')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2.5 py-1 rounded-lg font-semibold shrink-0">Eliminar</button>
-                </div>
-            `).join('');
-        }
-
-        function renderizarAdminPub2() {
-            const c = document.getElementById('listaPub2Admin');
-            if (!pub2Cache.length) { c.innerHTML = `<p class="text-center py-3 text-xs text-slate-500">Sin anuncios.</p>`; return; }
-            c.innerHTML = pub2Cache.map(a => `
-                <div class="bg-stadium-950 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <img src="${a.imgUrl}" class="w-10 h-7 object-cover rounded border border-white/10 shrink-0">
-                        <div class="min-w-0">
-                            <h4 class="text-xs font-bold text-white truncate">${a.titulo}</h4>
-                            <p class="text-[10px] text-slate-400 truncate">${a.segundos}s${a.esDoble ? ' • Doble' : ''}</p>
-                        </div>
-                    </div>
-                    <button onclick="eliminarAdAdmin('${a.id}', 'ads_pub2')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2.5 py-1 rounded-lg font-semibold shrink-0">Eliminar</button>
-                </div>
-            `).join('');
-        }
-
-        function renderizarAdminTercerTiempo() {
-            const c = document.getElementById('listaTercerTiempoAdmin');
-            if (!tercerTiempoCache.length) { c.innerHTML = `<p class="text-center py-3 text-xs text-slate-500">Sin comercios.</p>`; return; }
-            c.innerHTML = tercerTiempoCache.map(t => {
-                const vigente = esVigente72Hs(t);
-                const estadoTag = vigente
-                    ? `<span class="bg-emerald-500/15 text-emerald-300 text-[9px] font-bold px-1.5 py-0.5 rounded">${formatearTiempoRestante72Hs(t)}</span>`
-                    : `<span class="bg-rose-500/15 text-rose-300 text-[9px] font-bold px-1.5 py-0.5 rounded">Vencida</span>`;
-                return `
-                <div class="bg-stadium-950 border border-white/10 rounded-xl p-2.5 flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <img src="${t.imgUrl}" class="w-10 h-9 object-cover rounded border border-white/10 shrink-0">
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <h4 class="text-xs font-bold text-white truncate">${t.titulo}</h4>
-                                ${estadoTag}
-                            </div>
-                            <p class="text-[10px] text-amber-400 truncate">${t.categoria}${t.ubicacion ? ' • GPS' : ''}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button type="button" onclick="abrirModalEditarTercerTiempo('${t.id}')" class="bg-sky-500/15 hover:bg-sky-500/30 text-sky-300 text-[11px] px-2 py-1 rounded-lg font-semibold">Editar</button>
-                        <button type="button" onclick="eliminarTercerTiempoAdmin('${t.id}')" class="bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 text-[11px] px-2 py-1 rounded-lg font-semibold">Eliminar</button>
-                    </div>
-                </div>
-            `;
-            }).join('');
-        }
-
-        function renderizarTercerTiempo() {
-            const contenedor = document.getElementById('listaTercerTiempo');
-            const vigentes = tercerTiempoCache.filter(esVigente72Hs);
-
-            if (!vigentes.length) {
-                contenedor.innerHTML = `
-                    <div class="card-pro rounded-2xl p-8 text-center col-span-full">
-                        <div class="text-xl mb-2">🍻</div>
-                        <h3 class="font-display text-sm font-bold text-white">Sin promos activas</h3>
-                        <p class="text-xs text-slate-400 mt-1">Kioscos y picadas del post-partido (72 hs).</p>
-                    </div>`;
-                return;
-            }
-
-            contenedor.innerHTML = vigentes.map(t => {
-                const telLimpio = (t.whatsapp || '').replace(/\D/g, '');
-                const msgWsp = encodeURIComponent(`¡Hola ${t.titulo}! Vi su comercio en *Tercer Tiempo* de *Falta Uno SP* y quiero hacerles un pedido / consulta.`);
-                const tieneGps = t.ubicacion && typeof t.ubicacion.lat === 'number' && typeof t.ubicacion.lng === 'number';
-                const urlMaps = tieneGps ? `https://www.google.com/maps?q=${t.ubicacion.lat},${t.ubicacion.lng}` : null;
-
-                return `
-                <div class="card-pro rounded-2xl p-3.5 flex flex-col justify-between gap-3">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <img src="${t.imgUrl}" alt="${t.titulo}" class="w-12 h-12 rounded-xl object-cover border border-amber-500/25 shrink-0 bg-stadium-950">
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="text-[10px] font-bold bg-amber-500/15 text-amber-300 px-1.5 py-0.5 rounded">${t.categoria}</span>
-                                <span class="text-[10px] text-slate-400">⏳ ${formatearTiempoRestante72Hs(t)}</span>
-                            </div>
-                            <h3 class="font-display text-sm font-extrabold text-white truncate mt-0.5">${t.titulo}</h3>
-                            <p class="text-xs text-slate-400 truncate">${t.descripcion}</p>
-                        </div>
-                    </div>
-                    <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
-                        ${tieneGps
-                            ? `<a href="${urlMaps}" target="_blank" class="bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 text-xs font-bold px-2.5 py-1.5 rounded-xl transition flex items-center gap-1">
-                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                                <span>Maps</span>
-                               </a>`
-                            : `<span class="text-[11px] text-slate-500">Sáenz Peña</span>`
-                        }
-                        <a href="https://wa.me/549${telLimpio}?text=${msgWsp}" target="_blank" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl transition flex items-center gap-1">
-                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                            <span>Pedir</span>
-                        </a>
-                    </div>
-                </div>`;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        function actualizarRotacionPublicidades() {
-            if (timerPub1) clearTimeout(timerPub1);
-            if (timerPub2) clearTimeout(timerPub2);
-
-            const gridContainer = document.getElementById('contenedorPublicidadesInferiores');
-            const wrapperPub1 = document.getElementById('wrapperPub1');
-            const wrapperPub2 = document.getElementById('wrapperPub2');
-            const cont1 = document.getElementById('contenedorPub1');
-            const cont2 = document.getElementById('contenedorPub2');
-
-            let anuncioPub1 = pub1Cache.length ? pub1Cache[indicePub1 % pub1Cache.length] : null;
-            let anuncioPub2 = pub2Cache.length ? pub2Cache[indicePub2 % pub2Cache.length] : null;
-
-            if (anuncioPub1 && anuncioPub1.esDoble) {
-                gridContainer.className = "grid grid-cols-1 items-center";
-                wrapperPub2.style.display = "none";
-                wrapperPub1.style.display = "flex";
-                const linkWsp = `https://wa.me/549${anuncioPub1.whatsapp}?text=${encodeURIComponent(anuncioPub1.mensaje || 'Hola!')}`;
-                cont1.innerHTML = `<a href="${linkWsp}" target="_blank" class="block w-full text-center"><img src="${anuncioPub1.imgUrl}" alt="${anuncioPub1.titulo}" class="h-10 mx-auto rounded object-contain"></a>`;
-                timerPub1 = setTimeout(() => { indicePub1++; actualizarRotacionPublicidades(); }, (anuncioPub1.segundos || 6) * 1000);
-                return;
-            }
-
-            if (anuncioPub2 && anuncioPub2.esDoble) {
-                gridContainer.className = "grid grid-cols-1 items-center";
-                wrapperPub1.style.display = "none";
-                wrapperPub2.style.display = "flex";
-                const linkWsp = `https://wa.me/549${anuncioPub2.whatsapp}?text=${encodeURIComponent(anuncioPub2.mensaje || 'Hola!')}`;
-                cont2.innerHTML = `<a href="${linkWsp}" target="_blank" class="block w-full text-center"><img src="${anuncioPub2.imgUrl}" alt="${anuncioPub2.titulo}" class="h-10 mx-auto rounded object-contain"></a>`;
-                timerPub2 = setTimeout(() => { indicePub2++; actualizarRotacionPublicidades(); }, (anuncioPub2.segundos || 6) * 1000);
-                return;
-            }
-
-            gridContainer.className = "grid grid-cols-2 gap-2 items-center";
-            wrapperPub1.style.display = "flex";
-            wrapperPub2.style.display = "flex";
-
-            if (!anuncioPub1) {
-                cont1.innerHTML = `<span class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Publicidad 1</span>`;
-            } else {
-                const linkWsp1 = `https://wa.me/549${anuncioPub1.whatsapp}?text=${encodeURIComponent(anuncioPub1.mensaje || 'Hola!')}`;
-                cont1.innerHTML = `<a href="${linkWsp1}" target="_blank" class="block w-full text-center"><img src="${anuncioPub1.imgUrl}" alt="${anuncioPub1.titulo}" class="h-10 mx-auto rounded object-contain"></a>`;
-            }
-
-            if (!anuncioPub2) {
-                cont2.innerHTML = `<span class="text-[10px] font-medium text-slate-500 uppercase tracking-wider">Publicidad 2</span>`;
-            } else {
-                const linkWsp2 = `https://wa.me/549${anuncioPub2.whatsapp}?text=${encodeURIComponent(anuncioPub2.mensaje || 'Hola!')}`;
-                cont2.innerHTML = `<a href="${linkWsp2}" target="_blank" class="block w-full text-center"><img src="${anuncioPub2.imgUrl}" alt="${anuncioPub2.titulo}" class="h-10 mx-auto rounded object-contain"></a>`;
-            }
-
-            const tiempoMax = Math.max(
-                anuncioPub1 ? (anuncioPub1.segundos || 6) * 1000 : 6000,
-                anuncioPub2 ? (anuncioPub2.segundos || 6) * 1000 : 6000
-            );
-
-            timerPub1 = setTimeout(() => {
-                indicePub1++;
-                indicePub2++;
-                actualizarRotacionPublicidades();
-            }, tiempoMax);
-        }
-
-        window.setFiltro = (filtro) => {
-            filtroActual = filtro;
-            ['Fútbol', 'Pádel', 'Torneo', 'Rival'].forEach(f => {
-                const btn = document.getElementById(`filtro-${f}`);
-                if (btn) {
-                    if (f === filtro) {
-                        btn.className = "filtro-btn bg-emerald-500 text-slate-950 text-xs font-bold py-2 px-2 rounded-xl transition flex items-center justify-center gap-1";
-                    } else {
-                        btn.className = "filtro-btn bg-stadium-900 text-slate-300 hover:bg-stadium-800 border border-white/10 text-xs font-semibold py-2 px-2 rounded-xl transition flex items-center justify-center gap-1";
-                    }
-                }
-            });
-            renderizarPartidos();
-        };
-
-        window.manejarClickWhatsAppPartido = (event, partidoId, urlWsp) => {
-            event.preventDefault();
-            window.open(urlWsp, '_blank');
-        };
-
-        window.guardarPartido = async (e) => {
-            e.preventDefault();
-            if (!db) return alert("Conectando...");
-            const tipo = document.getElementById('tipoConvocatoria').value;
-            const puestoElegido = formatearPuestoLegible(document.getElementById('puesto').value);
-            const nuevoPartido = {
-                estado: 'activa',
-                creadorUid: auth?.currentUser?.uid || null,
-                creadorDeviceId: deviceIdActual,
-                esTorneo: tipo === 'torneo',
-                esRival: tipo === 'rival',
-                cancha: document.getElementById('canchaCustom').value.trim(),
-                fecha: document.getElementById('fechaPartido').value,
-                hora: document.getElementById('hora').value,
-                vibe: document.getElementById('vibePartido').value,
-                modalidad: document.getElementById('modalidad').value,
-                faltan: tipo === 'rival' ? 0 : parseInt(document.getElementById('faltan').value, 10),
-                puesto: tipo === 'rival' ? 'Equipo rival' : puestoElegido,
-                organizador: document.getElementById('organizador').value.trim(),
-                whatsapp: document.getElementById('whatsapp').value.trim(),
-                nota: document.getElementById('nota').value.trim(),
-                anotados: [],
-                creadoEn: serverTimestamp()
-            };
-            await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'matches'), nuevoPartido);
-            document.getElementById('formPartido').reset();
-            window.cerrarModalPartido();
-        };
-
-        function renderizarPartidos() {
-            const contenedor = document.getElementById('listaPartidos');
-            const ahora = new Date();
-            let vigentes = partidosCache.filter(p => {
-                if (!p.fecha || !p.hora) return true;
-                return new Date(`${p.fecha}T${p.hora}:00`) >= ahora;
-            });
-
-            let filtrados = vigentes;
-            if (filtroActual === 'Torneo') filtrados = vigentes.filter(p => p.esTorneo === true);
-            else if (filtroActual === 'Rival') filtrados = vigentes.filter(p => p.esRival === true);
-            else if (filtroActual === 'Fútbol') filtrados = vigentes.filter(p => p.modalidad && p.modalidad.includes('Fútbol') && !p.esTorneo && !p.esRival);
-            else if (filtroActual === 'Pádel') filtrados = vigentes.filter(p => p.modalidad && p.modalidad.includes('Pádel') && !p.esTorneo && !p.esRival);
-
-            if (filtrados.length === 0) {
-                contenedor.innerHTML = `
-                    <div class="card-pro rounded-2xl p-8 text-center">
-                        <div class="text-xl mb-2">🥅</div>
-                        <h3 class="font-display text-sm font-bold text-white">Sin convocatorias activas</h3>
-                        <p class="text-xs text-slate-400 mt-1">Tocá "Publicar" arriba a la derecha para armar una.</p>
-                    </div>`;
-                return;
-            }
-
-            contenedor.innerHTML = filtrados.map(p => {
-                const anotados = p.anotados || [];
-                const totalBuscados = p.faltan || 1;
-                const restantes = Math.max(0, totalBuscados - anotados.length);
-                const marcadoCompletoManual = p.estado === 'completo';
-                const completo = marcadoCompletoManual || (!p.esRival && restantes === 0);
-                const esCreador = esCreadorPartido(p);
-                const telLimpio = (p.whatsapp || '').replace(/\D/g, '');
-                const [, mes, dia] = (p.fecha || hoyStr).split('-');
-                const fechaFormateada = `${dia}/${mes}`;
-                const puestoTexto = formatearPuestoLegible(p.puesto);
-                const vibeTexto = p.vibe || '⚡ Recreativo';
-                const notaTexto = (p.nota || '').trim();
-
-                let badgeTipo = 'Falta Jugador';
-                let badgeTipoClase = 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25';
-                if (p.esRival) {
-                    badgeTipo = 'Buscan Rival';
-                    badgeTipoClase = 'bg-sky-500/15 text-sky-300 border-sky-500/25';
-                } else if (p.esTorneo) {
-                    badgeTipo = 'Torneo';
-                    badgeTipoClase = 'bg-amber-500/15 text-amber-300 border-amber-500/25';
-                }
-
-                const bloqueCupo = p.esRival
-                    ? `
-                        <div class="bg-stadium-950/90 border ${completo ? 'border-slate-800' : 'border-sky-500/25'} rounded-xl px-3 py-2 mb-2.5 flex items-center justify-between gap-2">
-                            <span class="text-xs font-bold ${completo ? 'text-slate-400' : 'text-sky-300'}">${completo ? 'COMPLETO • ' : '🤝 '}Amistoso • ${p.modalidad}</span>
-                            <span class="text-[11px] text-slate-300 truncate">${vibeTexto}</span>
-                        </div>
-                    `
-                    : `
-                        <div class="bg-stadium-950/90 border ${completo ? 'border-slate-800' : 'border-emerald-500/25'} rounded-xl px-3 py-2 mb-2.5 flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-2 min-w-0">
-                                <span class="px-2 py-0.5 rounded-lg ${completo ? 'bg-slate-800 text-slate-400' : 'bg-emerald-500 text-slate-950'} font-display font-black text-xs shrink-0">
-                                    ${completo ? 'COMPLETO' : `FALTA${restantes > 1 ? 'N' : ''} ${restantes}`}
-                                </span>
-                                <span class="text-xs font-bold text-white truncate">${puestoTexto}</span>
-                            </div>
-                            <span class="text-[11px] text-slate-400 truncate shrink-0">${vibeTexto}</span>
-                        </div>
-                    `;
-
-                const bloqueNota = notaTexto
-                    ? `<p class="text-[11px] text-amber-200/90 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-1.5 mb-2.5 truncate">📌 ${notaTexto}</p>`
-                    : '';
-
-                const recordatorioCreador = "\n\n📌 _Recordatorio para el organizador: si concretás la incorporación, no te olvides de marcar el partido como *Completo* en Falta Uno SP._";
-
-                const msgWsp = p.esRival
-                    ? `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que buscan rival de *${p.modalidad}* para el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Hablemos!${recordatorioCreador}`
-                    : `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que falta${restantes > 1 ? 'n' : ''} *${restantes}* (*${puestoTexto}*) para *${p.modalidad}* el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Me sumo!${recordatorioCreador}`;
-
-                const urlWsp = `https://wa.me/549${telLimpio}?text=${encodeURIComponent(msgWsp)}`;
-
-                const botonesAccion = completo
-                    ? (esCreador
-                        ? `
-                            <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" onclick="marcarPartidoCompleto('${p.id}', false)" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition">
-                                    Reabrir
-                                </button>
-                                <button type="button" onclick="eliminarPartidoPropio('${p.id}')" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[11px] font-bold px-2 py-1.5 rounded-xl transition">
-                                    Borrar
-                                </button>
-                            </div>
-                        `
-                        : `<span class="bg-slate-800 text-slate-400 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-white/10 shrink-0">Completo</span>`)
-                    : `
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            ${esCreador ? `
-                                <button type="button" onclick="marcarPartidoCompleto('${p.id}', true)" class="bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition">
-                                    Completo
-                                </button>
-                                <button type="button" onclick="eliminarPartidoPropio('${p.id}')" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[11px] font-bold px-2 py-1.5 rounded-xl transition">
-                                    Borrar
-                                </button>
-                            ` : ''}
-                            <a href="${urlWsp}" onclick="manejarClickWhatsAppPartido(event, '${p.id}', '${urlWsp}')" class="btn-glow text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl transition flex items-center gap-1 shrink-0">
-                                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                                <span>${p.esRival ? 'Retar' : 'Me sumo'}</span>
-                            </a>
-                        </div>
-                    `;
-
-                return `
-                <article class="card-pro rounded-2xl p-3.5 ${completo ? 'opacity-70' : ''}">
-                    <div class="flex items-center justify-between gap-2 mb-1.5">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="${badgeTipoClase} border text-[10px] font-bold px-2 py-0.5 rounded-md">${badgeTipo}</span>
-                            <span class="text-xs font-bold text-emerald-300">📅 ${fechaFormateada} • ${p.hora} hs</span>
-                            <span class="text-[11px] text-slate-400">• ${p.modalidad}</span>
-                        </div>
-                        ${esCreador ? `<span class="text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 px-2 py-0.5 rounded-md shrink-0">Tu partido</span>` : ''}
-                    </div>
-
-                    <h3 class="font-display text-base font-extrabold text-white truncate mb-2">🏟️ ${p.cancha}</h3>
-
-                    ${bloqueCupo}
-                    ${bloqueNota}
-
-                    <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
-                        <span class="text-xs text-slate-400 truncate">👤 <strong class="text-slate-200">${p.organizador}</strong></span>
-                        ${botonesAccion}
-                    </div>
-                </article>`;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        async function iniciarApp() {
-            const statusDot = document.getElementById('statusDot');
-            try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                await signInAnonymously(auth);
-
-                aplicarEstadoUItercerTiempo();
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#050a14] animate-pulse";
-                        renderizarPartidos();
-
-                        onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'tercer_tiempo_config'), (snap) => {
-                            if (snap.exists()) {
-                                const data = snap.data();
-                                if (data.modo) {
-                                    modoTercerTiempo = data.modo === 'libre' ? 'libre' : 'mp';
-                                }
-                                if (typeof data.habilitado === 'boolean') {
-                                    tercerTiempoHabilitado = data.habilitado;
-                                }
-                                aplicarEstadoUItercerTiempo();
-                            }
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'matches'), (snap) => {
-                            partidosCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            renderizarPartidos();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'courts'), (snap) => {
-                            canchasCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            if (!document.getElementById('modalPerfilComplejo').classList.contains('hidden') && complejoSeleccionadoModal) {
-                                renderizarGrillaHorariosModal();
-                            }
-                            if (!document.getElementById('modalPanelAutogestion').classList.contains('hidden') && complejoAutogestionadoActual) {
-                                renderizarTurnosAutogestion();
-                            }
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'admin_complexes'), (snap) => {
-                            complejosAdminCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            renderizarComplejosBotones();
-                            if (!document.getElementById('modalAdminPanel').classList.contains('hidden')) renderizarAdminComplejos();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'ads_pub1'), (snap) => {
-                            pub1Cache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            actualizarRotacionPublicidades();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'ads_pub2'), (snap) => {
-                            pub2Cache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            actualizarRotacionPublicidades();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo_pins'), (snap) => {
-                            tercerTiempoPinsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            if (!document.getElementById('modalAdminPanel').classList.contains('hidden')) renderizarAdminPinsTercerTiempo();
-                        });
-                        onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'tercer_tiempo'), (snap) => {
-                            tercerTiempoCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                            renderizarTercerTiempo();
-                            if (!document.getElementById('modalAdminPanel').classList.contains('hidden')) renderizarAdminTercerTiempo();
-                        });
-                    }
-                });
-            } catch (error) { console.error(error); }
-        }
-
-        iniciarApp();
-    </script>
-</body>
-</html>
