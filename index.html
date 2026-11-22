@@ -997,8 +997,24 @@
         const LOGO_FALLBACK = "https://raw.githubusercontent.com/Kanchapro/FaltaunoSP/refs/heads/main/logo.png";
         const DURACION_72HS_MS = 72 * 60 * 60 * 1000;
         const CLAVE_TEMA = "faltauno_tema";
+        const CLAVE_DEVICE_ID = "faltauno_device_id";
 
         let ultimoClickTabCanchas = 0;
+
+        function obtenerDeviceId() {
+            try {
+                let id = localStorage.getItem(CLAVE_DEVICE_ID);
+                if (!id) {
+                    id = 'dev_' + Math.random().toString(36).slice(2, 11) + '_' + Date.now().toString(36);
+                    localStorage.setItem(CLAVE_DEVICE_ID, id);
+                }
+                return id;
+            } catch (e) {
+                return 'dev_fallback';
+            }
+        }
+
+        const deviceIdActual = obtenerDeviceId();
 
         function aplicarTema(esClaro) {
             document.body.classList.toggle('light-mode', esClaro);
@@ -1281,6 +1297,45 @@
         let timerPub1 = null, timerPub2 = null;
 
         const hoyStr = new Date().toISOString().split('T')[0];
+
+        function esCreadorPartido(partido) {
+            if (!partido) return false;
+            const uidActual = auth?.currentUser?.uid;
+            if (partido.creadorUid && uidActual && partido.creadorUid === uidActual) {
+                return true;
+            }
+            if (partido.creadorDeviceId && partido.creadorDeviceId === deviceIdActual) {
+                return true;
+            }
+            return false;
+        }
+
+        window.marcarPartidoCompleto = async (partidoId, marcarCompleto = true) => {
+            if (!db || !partidoId) return;
+            try {
+                await updateDoc(
+                    doc(db, 'artifacts', appId, 'public', 'data', 'matches', partidoId),
+                    {
+                        estado: marcarCompleto ? 'completo' : 'activa',
+                        marcadoCompletoEn: marcarCompleto ? serverTimestamp() : null
+                    }
+                );
+            } catch (err) {
+                console.error("No se pudo actualizar el estado del partido:", err);
+                alert("❌ No se pudo actualizar el estado del partido.");
+            }
+        };
+
+        window.eliminarPartidoPropio = async (partidoId) => {
+            if (!db || !partidoId) return;
+            if (!confirm("¿Eliminar esta convocatoria?")) return;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'matches', partidoId));
+            } catch (err) {
+                console.error("No se pudo eliminar el partido:", err);
+                alert("❌ No se pudo eliminar la convocatoria.");
+            }
+        };
 
         function aplicarEstadoUItercerTiempo() {
             const textoBtnPrincipal = document.getElementById('textoBotonPrincipal');
@@ -2385,20 +2440,9 @@
             renderizarPartidos();
         };
 
-        window.manejarClickWhatsAppPartido = async (event, partidoId, urlWsp) => {
+        window.manejarClickWhatsAppPartido = (event, partidoId, urlWsp) => {
             event.preventDefault();
-            try {
-                if (db && partidoId) {
-                    await updateDoc(
-                        doc(db, 'artifacts', appId, 'public', 'data', 'matches', partidoId),
-                        { estado: 'en_suspenso', puestoEnSuspensoEn: serverTimestamp() }
-                    );
-                }
-            } catch (err) {
-                console.error("No se pudo poner en suspenso:", err);
-            } finally {
-                window.open(urlWsp, '_blank');
-            }
+            window.open(urlWsp, '_blank');
         };
 
         window.guardarPartido = async (e) => {
@@ -2408,6 +2452,8 @@
             const puestoElegido = formatearPuestoLegible(document.getElementById('puesto').value);
             const nuevoPartido = {
                 estado: 'activa',
+                creadorUid: auth?.currentUser?.uid || null,
+                creadorDeviceId: deviceIdActual,
                 esTorneo: tipo === 'torneo',
                 esRival: tipo === 'rival',
                 cancha: document.getElementById('canchaCustom').value.trim(),
@@ -2432,7 +2478,6 @@
             const contenedor = document.getElementById('listaPartidos');
             const ahora = new Date();
             let vigentes = partidosCache.filter(p => {
-                if (p.estado === 'en_suspenso') return false;
                 if (!p.fecha || !p.hora) return true;
                 return new Date(`${p.fecha}T${p.hora}:00`) >= ahora;
             });
@@ -2457,7 +2502,9 @@
                 const anotados = p.anotados || [];
                 const totalBuscados = p.faltan || 1;
                 const restantes = Math.max(0, totalBuscados - anotados.length);
-                const completo = !p.esRival && restantes === 0;
+                const marcadoCompletoManual = p.estado === 'completo';
+                const completo = marcadoCompletoManual || (!p.esRival && restantes === 0);
+                const esCreador = esCreadorPartido(p);
                 const telLimpio = (p.whatsapp || '').replace(/\D/g, '');
                 const [, mes, dia] = (p.fecha || hoyStr).split('-');
                 const fechaFormateada = `${dia}/${mes}`;
@@ -2477,8 +2524,8 @@
 
                 const bloqueCupo = p.esRival
                     ? `
-                        <div class="bg-stadium-950/90 border border-sky-500/25 rounded-xl px-3 py-2 mb-2.5 flex items-center justify-between gap-2">
-                            <span class="text-xs font-bold text-sky-300">🤝 Amistoso • ${p.modalidad}</span>
+                        <div class="bg-stadium-950/90 border ${completo ? 'border-slate-800' : 'border-sky-500/25'} rounded-xl px-3 py-2 mb-2.5 flex items-center justify-between gap-2">
+                            <span class="text-xs font-bold ${completo ? 'text-slate-400' : 'text-sky-300'}">${completo ? 'COMPLETO • ' : '🤝 '}Amistoso • ${p.modalidad}</span>
                             <span class="text-[11px] text-slate-300 truncate">${vibeTexto}</span>
                         </div>
                     `
@@ -2498,11 +2545,43 @@
                     ? `<p class="text-[11px] text-amber-200/90 bg-amber-500/10 border border-amber-500/20 rounded-xl px-3 py-1.5 mb-2.5 truncate">📌 ${notaTexto}</p>`
                     : '';
 
+                const recordatorioCreador = "\n\n📌 _Recordatorio para el organizador: si concretás la incorporación, no te olvides de marcar el partido como *Completo* en Falta Uno SP._";
+
                 const msgWsp = p.esRival
-                    ? `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que buscan rival de *${p.modalidad}* para el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Hablemos!`
-                    : `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que falta${restantes > 1 ? 'n' : ''} *${restantes}* (*${puestoTexto}*) para *${p.modalidad}* el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Me sumo!`;
+                    ? `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que buscan rival de *${p.modalidad}* para el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Hablemos!${recordatorioCreador}`
+                    : `¡Hola ${p.organizador}! Vi en *Falta Uno SP* que falta${restantes > 1 ? 'n' : ''} *${restantes}* (*${puestoTexto}*) para *${p.modalidad}* el *${fechaFormateada}* a las *${p.hora} hs* en *${p.cancha}*. ¡Me sumo!${recordatorioCreador}`;
 
                 const urlWsp = `https://wa.me/549${telLimpio}?text=${encodeURIComponent(msgWsp)}`;
+
+                const botonesAccion = completo
+                    ? (esCreador
+                        ? `
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button type="button" onclick="marcarPartidoCompleto('${p.id}', false)" class="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition">
+                                    Reabrir
+                                </button>
+                                <button type="button" onclick="eliminarPartidoPropio('${p.id}')" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[11px] font-bold px-2 py-1.5 rounded-xl transition">
+                                    Borrar
+                                </button>
+                            </div>
+                        `
+                        : `<span class="bg-slate-800 text-slate-400 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-white/10 shrink-0">Completo</span>`)
+                    : `
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            ${esCreador ? `
+                                <button type="button" onclick="marcarPartidoCompleto('${p.id}', true)" class="bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition">
+                                    Completo
+                                </button>
+                                <button type="button" onclick="eliminarPartidoPropio('${p.id}')" class="bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 text-[11px] font-bold px-2 py-1.5 rounded-xl transition">
+                                    Borrar
+                                </button>
+                            ` : ''}
+                            <a href="${urlWsp}" onclick="manejarClickWhatsAppPartido(event, '${p.id}', '${urlWsp}')" class="btn-glow text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl transition flex items-center gap-1 shrink-0">
+                                <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                                <span>${p.esRival ? 'Retar' : 'Me sumo'}</span>
+                            </a>
+                        </div>
+                    `;
 
                 return `
                 <article class="card-pro rounded-2xl p-3.5 ${completo ? 'opacity-70' : ''}">
@@ -2512,6 +2591,7 @@
                             <span class="text-xs font-bold text-emerald-300">📅 ${fechaFormateada} • ${p.hora} hs</span>
                             <span class="text-[11px] text-slate-400">• ${p.modalidad}</span>
                         </div>
+                        ${esCreador ? `<span class="text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 px-2 py-0.5 rounded-md shrink-0">Tu partido</span>` : ''}
                     </div>
 
                     <h3 class="font-display text-base font-extrabold text-white truncate mb-2">🏟️ ${p.cancha}</h3>
@@ -2521,10 +2601,7 @@
 
                     <div class="pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
                         <span class="text-xs text-slate-400 truncate">👤 <strong class="text-slate-200">${p.organizador}</strong></span>
-                        <a href="${urlWsp}" onclick="manejarClickWhatsAppPartido(event, '${p.id}', '${urlWsp}')" class="btn-glow text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl transition flex items-center gap-1 shrink-0">
-                            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                            <span>${p.esRival ? 'Retar' : 'Me sumo'}</span>
-                        </a>
+                        ${botonesAccion}
                     </div>
                 </article>`;
             }).join('');
@@ -2545,6 +2622,7 @@
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         statusDot.className = "absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#050a14] animate-pulse";
+                        renderizarPartidos();
 
                         onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'tercer_tiempo_config'), (snap) => {
                             if (snap.exists()) {
